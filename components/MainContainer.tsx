@@ -1,6 +1,6 @@
 "use client";
 import React, { useMemo } from "react";
-import { FaArrowLeft, FaArrowRight, FaRegCompass, FaSpotify, FaUser, FaUsers } from "react-icons/fa6";
+import { FaArrowLeft, FaArrowRight, FaHeart, FaRegCompass, FaSpotify, FaUser, FaUsers } from "react-icons/fa6";
 import { twMerge } from "tailwind-merge";
 import Box from "./Box";
 import { BsFileEarmarkMusicFill, BsMusicNoteList } from "react-icons/bs";
@@ -13,12 +13,16 @@ import { GiImperialCrown } from "react-icons/gi";
 import AuthModal from './AuthModal';
 import useAuthModal from "@/hooks/useAuthModal";
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { userUser } from "@/hooks/useUser";
+import { useUser } from "@/hooks/useUser";
 import Image from "next/image";
 import { IoIosPersonAdd } from "react-icons/io";
 import { TbMusicPlus } from "react-icons/tb";
 import useArtistModal from '@/hooks/useArtistModal';
 import { CiLogout } from "react-icons/ci";
+import SongModal from './SongModal';
+import useSongModal from "@/hooks/useSongModal";
+import SearchInput from "./SearchInput";
+import usePlayer from "@/hooks/usePlayer";
 
 
 interface MainContainerProps {
@@ -31,9 +35,11 @@ const MainContainer: React.FC<MainContainerProps> = ({ children }) => {
 
     const AuthModal = useAuthModal()
     const ArtistModal = useArtistModal()
+    const SongModal = useSongModal()
+    const player = usePlayer()
 
     const supabaseClient = useSupabaseClient()
-    const { user } = userUser()
+    const { user } = useUser()
     const router = useRouter()
 
     const handleLogout = async () => {
@@ -49,8 +55,8 @@ const MainContainer: React.FC<MainContainerProps> = ({ children }) => {
         {
             icon: BsFileEarmarkMusicFill,
             label: "Thư Viện",
-            active: pathName === "/thuvien",
-            href: "/thuvien"
+            active: pathName === "/favourites",
+            href: "/favourites"
         },
         {
             icon: FaRegCompass,
@@ -58,9 +64,10 @@ const MainContainer: React.FC<MainContainerProps> = ({ children }) => {
             active: pathName === "/",
             href: "/"
         }
+
     ], [pathName])
 
-    return (<div className={twMerge(`flex h-full`, "")}>
+    return (<div className={twMerge(`flex h-full`, player.activeId && "h-[calc(100% - 80px)]")}>
         {/* left */}
         <div className="flex h-full flex-col bg-white/10">
             <div className="w-full flex items-center gap-3 px-4 py-6">
@@ -90,9 +97,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ children }) => {
             </div>
         </div>
 
-        {/* main */}
-        <main className="flex-1 overflow-y-auto bg-black-50">
-
+        <div className="flex flex-col w-full">
             {/* right */}
             <RightBar>
                 {/*  */}
@@ -108,7 +113,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ children }) => {
 
 
                 {/* search */}
-                    <input className="relative placeholder-white float-start w-[500px] px-4 py-2 rounded-full bg-white/20" type="text" placeholder="Tìm kiếm bài hát, nghệ sĩ, lời bài hát...." />
+                <SearchInput/>
                 {/* pretium user */}
                 <div className="flex flex-row gap-x-2 gap-y-2 relative bg-[#D08011] px-5 py-2 rounded-full cursor-pointer">
                     <GiImperialCrown size={23} className="text-white" />
@@ -119,9 +124,6 @@ const MainContainer: React.FC<MainContainerProps> = ({ children }) => {
                 <Link href={"/artists"} className="bg-transparent placeholder-zinc-200 py-2">
                     <FaUsers size={20} className="text-neutral-400 text-2xl hover:text-white" />
                 </Link>
-                <Link href={"/songs"} className="bg-transparent placeholder-zinc-200 py-2">
-                    <BsMusicNoteList size={20} className="text-neutral-400 text-2xl hover:text-white" />
-                </Link>
 
                 {/* loading these option only if it its matches the super admin id */}
                 {
@@ -131,7 +133,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ children }) => {
                                 <IoIosPersonAdd className="text-xl text-neutral-400 hover:text-white" />
                             </Button>
 
-                            <Button className="bg-transparent">
+                            <Button onClick={SongModal.onOpen} className="bg-transparent">
                                 <TbMusicPlus className="text-xl text-neutral-400 hover:text-white" />
                             </Button>
                         </React.Fragment>
@@ -157,11 +159,12 @@ const MainContainer: React.FC<MainContainerProps> = ({ children }) => {
                 )}
 
             </RightBar>
+            {/* main */}
+            <main className="flex-1 overflow-y-auto bg-black-50">
+                {children}
+            </main>
+        </div>
 
-
-            {children}
-
-        </main>
     </div>);
 }
 

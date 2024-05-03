@@ -3,11 +3,11 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
 const getArtists = async () : Promise<Artist[]> => {
-    const supbase = createServerComponentClient({
+    const supabase = createServerComponentClient({
         cookies: cookies,
     })
 
-    const { data, error } = await supbase.from("artists").select("*").order("created_at", {ascending: false})
+    const { data, error } = await supabase.from("artists").select("*").order("created_at", {ascending: false})
     if (error) {
         console.log(error)
     }

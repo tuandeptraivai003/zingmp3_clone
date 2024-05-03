@@ -1,4 +1,4 @@
-import { userUser } from "@/hooks/useUser";
+import { useUser } from "@/hooks/useUser";
 import Modal from "./Modal";
 import useArtistModal from "@/hooks/useArtistModal";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -14,7 +14,7 @@ import uniqid from "uniqid";
 const ArtistModal = () => {
     const artistModal = useArtistModal()
 
-    const { user } = userUser()
+    const { user } = useUser()
     const supabaseClient = useSupabaseClient()
     const router = useRouter()
 
@@ -90,7 +90,7 @@ const ArtistModal = () => {
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
                 {errors?.author && (
                     <div className="w-full flex items-end justify-end">
-                        <p className="text-xs text-red-500">Vui lòng nhập tên nghệ sĩ</p>
+                        <p className="text-xs text-red-500">* Vui lòng nhập tên nghệ sĩ</p>
                     </div>
                 )}
                 <Input
@@ -105,7 +105,7 @@ const ArtistModal = () => {
 
                 {errors?.picture && (
                     <div className="w-full flex items-end justify-end">
-                        <p className="text-xs text-red-500">Vui lòng chọn ảnh</p>
+                        <p className="text-xs text-red-500">* Vui lòng chọn ảnh</p>
                     </div>
                 )}
                 {/* upload ảnh */}

@@ -6,6 +6,7 @@ import SupabaseProvider from '../providers/SupabaseProvider';
 import UserProvider from "@/providers/UserProvider";
 import ModalProvider from "@/providers/ModalProvider";
 import ToastProvider from "@/providers/ToastProvider";
+import Player from "@/components/Player";
 
 
 const poppins = Poppins({ 
@@ -31,6 +32,7 @@ export default function RootLayout({
           <UserProvider>
             <ModalProvider/>
             <MainContainer>{children}</MainContainer>
+            <Player/>
           </UserProvider>
         </SupabaseProvider>
       </body>
