@@ -6,7 +6,7 @@ import Box from "./Box";
 import { BsFileEarmarkMusicFill, BsMusicNoteList } from "react-icons/bs";
 import { usePathname, useRouter } from "next/navigation";
 import SideBarItem from "./SideBarItem";
-import RightBar from './RightBar';
+import Header from './Header';
 import Button from "./Button";
 import Link from "next/link";
 import { GiImperialCrown } from "react-icons/gi";
@@ -99,7 +99,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ children }) => {
 
         <div className="flex flex-col w-full">
             {/* right */}
-            <RightBar>
+            <Header>
                 {/*  */}
                 <div className="float-start">
                     <Button className="bg-inherit" onClick={() => router.back()}>
@@ -158,7 +158,7 @@ const MainContainer: React.FC<MainContainerProps> = ({ children }) => {
                     </Button>
                 )}
 
-            </RightBar>
+            </Header>
             {/* main */}
             <main className="flex-1 overflow-y-auto bg-black-50">
                 {children}

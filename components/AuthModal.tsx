@@ -32,8 +32,8 @@ const AuthModal = () => {
 
     return (
         <Modal
-            title="Xin chao"
-            description="tuan dep trai"
+            title="Xin chào"
+            description=""
             isOpen={isOpen}
             onChange={onChange}
         >
